@@ -1,0 +1,127 @@
+/* The room is the interface. Context stays at the edges of the scene. */
+html.game-playing{height:100%;overflow:hidden}
+body.playing{height:100dvh;overflow:hidden;background:#050709}
+body.playing .masthead{position:absolute;inset:0 0 auto;z-index:60;max-width:none;height:66px;background:linear-gradient(#030507e8,#03050700);pointer-events:none}
+body.playing .masthead a,body.playing .masthead button{pointer-events:auto}
+body.playing main{position:relative;max-width:none;width:100%;height:100dvh;padding:0;overflow:hidden}
+body.playing .stage{width:100%;height:100dvh;min-height:0;max-height:none;margin:0;aspect-ratio:auto;background:#080b0d;overflow:clip}
+body.playing .stage::before{content:"";position:absolute;inset:-7%;z-index:0;background-image:var(--room-image);background-position:center;background-size:cover;filter:blur(34px) brightness(.37) saturate(.8);transform:scale(1.04);pointer-events:none}
+body.playing .stage #room{z-index:1;filter:saturate(.92) contrast(1.03)}
+body.playing .stage.lights-out #room{filter:brightness(.12)}
+body.playing .stage #nextRoom{z-index:2}
+body.playing .stage .hud{top:86px;left:36px;right:36px;text-shadow:0 2px 15px #000,0 2px 4px #000}
+body.playing .stage .hud dt{color:#f1e4d1}
+body.playing .stage .room-note{bottom:32%;left:36px;border:0;background:#06090ca0;box-shadow:none}
+body.playing .console{position:absolute;left:0;right:0;bottom:31px;z-index:11;min-height:0;max-height:29dvh;overflow:auto;padding:43px 42px 21px;gap:50px;border:0;background:linear-gradient(0deg,#030507f5 0%,#030507d9 57%,#03050700 100%);grid-template-columns:1fr 1fr;align-items:end}
+body.playing .console .story{max-width:620px}
+body.playing .console .story h2{font-size:clamp(22px,2.2vw,34px);line-height:1.15;margin:4px 0 8px;text-shadow:0 2px 10px #000}
+body.playing .console .story p:not(.micro){font-size:12px;line-height:1.5}
+body.playing .console .objective{margin:0 0 6px;font-size:11px;color:#e7d4ac}
+body.playing .console .action-hint{margin:0;font-size:11px}
+body.playing .footer{position:absolute;left:0;right:0;bottom:0;z-index:12;min-height:31px;padding:7px 40px 8px;border:0;background:#030507f5}
+body.playing .hotspot-ring{background:#080e1399;backdrop-filter:blur(3px)}
+body.playing .ambient-threat{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:.14;background:radial-gradient(ellipse 22% 38% at 54% 32%,#ba211c77,transparent 83%),linear-gradient(90deg,#7b171922,transparent 25%,transparent 75%,#50121525);mix-blend-mode:screen}
+body.playing .stage[data-alert="medium"] .ambient-threat{opacity:.32;animation:ambient-alert 8s ease-in-out infinite}
+body.playing .stage[data-alert="high"] .ambient-threat{opacity:.6;animation:ambient-alert 5s ease-in-out infinite}
+body.playing .stage[data-alert="high"] .lamp{animation-duration:2.4s}
+@keyframes ambient-alert{0%,100%{opacity:.2}48%{opacity:.58}53%{opacity:.12}59%{opacity:.47}}
+
+/* Close inspection occupies the viewport, rather than a floating card. */
+.detail{padding:0;background:#030507ef;backdrop-filter:none}
+.detail-card{position:relative;width:100vw;height:100dvh;max-height:none;overflow:hidden;border:0;background:#050709;box-shadow:none}
+.detail-head{position:absolute;inset:0 0 auto;z-index:30;height:65px;padding:0 34px;background:linear-gradient(#030507eb,#03050700);border:0}
+.detail-head button{font-size:13px;min-height:44px}
+.detail-frame{height:100%;min-height:0}
+.detail-frame:before{background:linear-gradient(#03050776,transparent 22%,transparent 56%,#030507bd)}
+.detail-bottom{position:absolute;inset:auto 0 0;z-index:25;display:grid;grid-template-columns:minmax(0,1fr) minmax(235px,320px);align-items:end;gap:40px;padding:74px max(38px,6vw) 35px;background:linear-gradient(0deg,#030507f7 0%,#030507d9 58%,#03050700 100%)}
+.detail-bottom h2{font-size:clamp(27px,3vw,43px);line-height:1.15}
+.detail-bottom p:not(.micro){font-size:14px;max-width:620px}
+.modal-action{background:#0b1114b5;backdrop-filter:blur(7px);min-height:53px}
+.modal-action.primary-action{background:#9b6d3645}
+.detail-coordinate{bottom:40%;left:38px}
+
+/* Night assault is played on the room image. */
+.assault{position:absolute;inset:0;z-index:125;background:radial-gradient(ellipse at 55% 42%,#a02b2426,transparent 42%),linear-gradient(#1006088f,#03050761 35%,#090406b0);color:#fff0e3;pointer-events:none}
+.assault>*{pointer-events:auto}
+.assault-head{position:absolute;top:86px;left:4%;right:4%;display:flex;justify-content:space-between;gap:20px;font:12px/1.3 ui-monospace,monospace;letter-spacing:.12em;color:#ffc9b3;text-shadow:0 2px 8px #000}
+.assault-timer{position:absolute;top:114px;left:4%;right:4%;height:2px;background:#f3cfba36;overflow:hidden}
+.assault-timer span{display:block;width:100%;height:100%;background:#e8725b;box-shadow:0 0 15px #ff654f}
+.assault h2{position:absolute;top:17%;left:4%;right:4%;margin:0;font:clamp(26px,3vw,46px)/1.15 "Songti SC",serif;text-shadow:0 3px 20px #000,0 3px 7px #000}
+.assault-brace{position:absolute;z-index:2;transform:translate(-50%,-50%);width:128px;min-height:75px;padding:12px 10px;border:2px solid #f5c0a8;background:#391a1ac9;box-shadow:0 0 0 13px #ffb3a321,0 0 55px #c74036b9;text-align:center;font-size:17px;font-weight:600;letter-spacing:.04em;touch-action:manipulation}
+.assault-brace small{display:block;margin-top:5px;font-size:10px;font-weight:400;color:#fae1cf}
+.assault-brace:before,.assault-brace:after{content:"";position:absolute;background:#f3c6a9;pointer-events:none}
+.assault-brace:before{width:26px;height:1px;left:50%;top:-17px;transform:translateX(-50%)}
+.assault-brace:after{width:1px;height:26px;left:-17px;top:50%;transform:translateY(-50%)}
+.assault-foot{position:absolute;left:4%;right:4%;bottom:11%;display:flex;justify-content:space-between;align-items:end;gap:20px;text-shadow:0 2px 8px #000}
+.assault-foot p{max-width:490px;margin:0;font-size:15px;line-height:1.6}
+.assault-foot button{border:1px solid #dec5b579;background:#07090bdc;padding:12px 15px;font-size:12px;white-space:nowrap}
+.stage.assault-mode .ambient-threat{opacity:1!important;background:radial-gradient(ellipse at 50% 40%,#f4342d32,transparent 62%),linear-gradient(90deg,#c11c1c3d,transparent 30%,transparent 70%,#9f14143d)}
+.stage.assault-hit #room{animation:room-impact .5s ease-out both}
+.stage.assault-missed .assault{animation:breach-flash .3s ease-out both}
+body.playing:has(.stage.assault-mode) .masthead,body.playing .stage.assault-mode .hud,body.playing .stage.assault-mode .room-note{opacity:0;pointer-events:none}
+@keyframes room-impact{0%{transform:scale(1)}20%{transform:scale(1.025) translate(5px,-3px)}38%{transform:scale(1.01) translate(-7px,4px)}65%{transform:scale(1.014) translate(3px,-2px)}100%{transform:scale(1)}}
+@keyframes breach-flash{0%{box-shadow:inset 0 0 0 #cf2c1c}35%{box-shadow:inset 0 0 170px #cf2c1cb8}100%{box-shadow:inset 0 0 50px #cf2c1c4d}}
+body.playing .stage.assault-mode+.console,body.playing:has(.stage.assault-mode) .footer{opacity:0;pointer-events:none}
+
+/* The close of the first chapter remains anchored to the room the player built. */
+.ending{position:absolute;inset:0;z-index:120;display:flex;align-items:center;padding:11vh max(7vw,26px);background:linear-gradient(90deg,#030608f5 0%,#030608dd 38%,#03060822 78%),linear-gradient(0deg,#030608a8,transparent 45%);color:#f2e7d3;transition:opacity .45s}
+.stage.lights-out .ending{opacity:0}
+.ending-content{position:relative;max-width:620px;width:100%;padding-left:26px;border-left:2px solid #dfb778}
+.ending-code{font:12px/1.5 ui-monospace,monospace;letter-spacing:.18em;color:#dfb778;margin:0 0 24px}
+.ending h2{font:clamp(42px,6vw,80px)/1.1 "Songti SC",serif;letter-spacing:.03em;margin:0 0 18px;text-shadow:0 4px 18px #000}
+.ending-copy{max-width:490px;font-size:16px;line-height:1.8;color:#e1d9ca;margin:0 0 28px}
+.ending dl{display:flex;gap:28px;flex-wrap:wrap;border-top:1px solid #f1dfbe5c;border-bottom:1px solid #f1dfbe5c;padding:17px 0;margin:0 0 25px}
+.ending dt{font-size:11px;color:#c9bca9;margin-bottom:6px}.ending dd{font:20px/1.2 "Songti SC",serif;margin:0}
+.ending-actions{display:flex;gap:12px;flex-wrap:wrap}.ending-actions button{min-height:49px;padding:12px 17px;background:#0d1518bf;border:1px solid #e3c99575;font-size:13px}.ending-actions button:last-child{color:#2c2115;background:#d9bd87;border-color:#d9bd87}
+body.playing:has(.stage.ending-mode) .masthead,body.playing .stage.ending-mode .hud,body.playing .stage.ending-mode .room-note,body.playing .stage.ending-mode+.console,body.playing:has(.stage.ending-mode) .footer{opacity:0;pointer-events:none}
+
+@media(max-width:850px){
+  body.playing .stage .hud{left:18px;right:18px;top:70px}
+  body.playing .stage .room-note{left:16px}
+  body.playing .console{grid-template-columns:1fr;gap:11px;padding:39px 19px 18px;max-height:31dvh}
+  body.playing .footer{padding:7px 18px}
+  .detail-bottom{grid-template-columns:1fr;gap:15px;padding:60px 22px 21px;max-height:56dvh;overflow:auto}
+  .detail-bottom h2{font-size:28px}
+  .detail-bottom p:not(.micro){font-size:12px;line-height:1.6}
+  .detail-actions{max-width:none}
+  .detail-coordinate{bottom:57%;left:18px}
+}
+@media(max-width:540px){
+  body.playing .masthead{height:59px;padding:0 15px}
+  body.playing .stage{height:100dvh;min-height:0;margin:0;overflow:clip;aspect-ratio:auto}
+  body.playing .stage .hud{top:70px;left:16px;right:16px}
+  body.playing .stage .hud h1{font-size:17px}
+  body.playing .stage .hud dl{gap:13px}
+  body.playing .stage .hud dd{font-size:17px}
+  body.playing .stage .room-note{bottom:30%;left:14px;font-size:9px}
+  body.playing .console{bottom:29px;max-height:29dvh;padding:31px 16px 12px;gap:6px}
+  body.playing .console .story h2{font-size:21px;margin:2px 0 4px}
+  body.playing .console .story p:not(.micro){font-size:10px;line-height:1.4;margin:3px 0}
+  body.playing .console .objective{font-size:10px;line-height:1.45}
+  body.playing .console .action-hint{font-size:10px;line-height:1.4}
+  body.playing .footer{font-size:9px;padding:7px 15px}
+  .assault-head{top:84px;font-size:10px}
+  .assault-timer{top:108px}
+  .assault h2{top:17%;font-size:27px}
+  .assault-brace{width:112px;min-height:67px;font-size:14px}
+  .assault-foot{bottom:13%;align-items:start;flex-direction:column;gap:12px}
+  .assault-foot p{font-size:12px}
+  .assault-foot button{font-size:11px}
+  .ending{padding:10vh 24px;align-items:center;background:linear-gradient(0deg,#030608e8,#03060866 95%)}
+  .ending-content{padding-left:17px}
+  .ending-code{font-size:10px;margin-bottom:17px}
+  .ending h2{font-size:43px}
+  .ending-copy{font-size:13px;margin-bottom:18px}
+  .ending dl{gap:18px;padding:12px 0;margin-bottom:18px}
+  .ending dd{font-size:16px}
+  .ending-actions button{font-size:11px;min-height:46px}
+  .hotspot{width:44px;height:44px}
+  .hotspot-ring{width:22px;height:22px}
+  .hotspot-ring:after{inset:8px}
+  .window-barricade{left:43%;top:calc(50% - 22.5vw);width:27%;height:15.2vw;border-width:2px}
+  .detail-head{height:54px;padding:0 16px}
+  .detail-bottom{max-height:62dvh;padding:45px 16px 18px}
+  .detail-coordinate{bottom:66%;left:14px;font-size:9px}
+  .modal-action{min-height:44px;padding:9px 12px;font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.ambient-threat,.stage.assault-hit #room,.stage.assault-missed .assault{animation:none!important}}
