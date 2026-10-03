@@ -6,8 +6,9 @@ window.createShelterAudio = function ({onError=()=>{},onChange=()=>{},musicFile=
     const el=document.createElement('audio');el.id='audio-'+name;el.src='assets/audio/'+file;el.loop=true;el.preload='auto';el.setAttribute('aria-hidden','true');document.body.append(el);tracks[name]=el;
   }
   tracks.zombie.volume=.24;tracks.fire.volume=.55;tracks.music.volume=.175;
-  let active=false,music=musicDefault,fire=true,threat=false,audioContext=null;
+  let active=false,music=musicDefault,fire=true,threat=false,audioContext=null,house=0,area="room",spot=null;
   function impact(){try{const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;audioContext ||= new Audio();const oscillator=audioContext.createOscillator(),gain=audioContext.createGain(),now=audioContext.currentTime;oscillator.type='triangle';oscillator.frequency.setValueAtTime(100,now);oscillator.frequency.exponentialRampToValueAtTime(42,now+.24);gain.gain.setValueAtTime(.001,now);gain.gain.exponentialRampToValueAtTime(.22,now+.018);gain.gain.exponentialRampToValueAtTime(.001,now+.3);oscillator.connect(gain).connect(audioContext.destination);oscillator.start(now);oscillator.stop(now+.31);}catch{}}
+  function levels(){tracks.zombie.volume=threat?.58:spot&&["door","window","towerDoor"].includes(spot)?.36:house===3?(area==="room"?.09:.28):.22;tracks.fire.volume=spot==="fire"?.55:.3;}
   const shouldPlay=name=>active&&!document.hidden&&(name==='zombie'||(name==='fire'&&fire)||(name==='music'&&music));
   async function sync(){
     const results=await Promise.allSettled(Object.entries(tracks).map(async([name,el])=>{
@@ -26,7 +27,8 @@ window.createShelterAudio = function ({onError=()=>{},onChange=()=>{},musicFile=
     setMusicSource(file){if(tracks.music.src.endsWith('/'+file))return sync();tracks.music.pause();tracks.music.src='assets/audio/'+file;tracks.music.load();return sync();},
     setMusicVolume(value){tracks.music.volume=Math.max(0,Math.min(1,value))*.5;},
     setFire(value){fire=Boolean(value);return sync();},
-    setThreat(value){threat=Boolean(value);tracks.zombie.volume=threat ? .58 : .24;},
+    setThreat(value){threat=Boolean(value);levels();},
+    setContext(h,a,p=null){house=h;area=a;spot=p;levels();},
     impact,
     retry:sync,
     get music(){return music;}
